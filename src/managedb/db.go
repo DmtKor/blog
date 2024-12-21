@@ -27,7 +27,7 @@ func (db *DB) Init(initStr string) error {
 	}
 	_, err = db.Database.Exec("CREATE TABLE IF NOT EXISTS Comment (" + 
 							  "Id BIGSERIAL PRIMARY KEY," +
-							  "PostId BIGINT REFERENCES Post (Id)," +
+							  "PostId BIGINT REFERENCES Post (Id) ON DELETE CASCADE," +
 							  "Author VARCHAR(30) DEFAULT 'Anonymous'," +
 							  "Content VARCHAR(250) CHECK(Content != '')," +
 							  "CommDate TIMESTAMP WITH TIME ZONE," +
@@ -44,8 +44,8 @@ func (db *DB) Init(initStr string) error {
 		return err
 	}
 	_, err = db.Database.Exec("CREATE TABLE IF NOT EXISTS Tags (" + 
-							  "PostId BIGINT REFERENCES Post (Id)," +
-							  "TagId INT REFERENCES TagText (Id)," +
+							  "PostId BIGINT REFERENCES Post (Id) ON DELETE CASCADE," +
+							  "TagId INT REFERENCES TagText (Id) ON DELETE CASCADE," +
 							  "UNIQUE(PostId, TagId)" +
 							  ");")
 	if err != nil {
