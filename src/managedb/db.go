@@ -1,0 +1,59 @@
+package managedb
+
+import (
+	"database/sql"
+	_ "github.com/lib/pq"
+)
+
+type DB struct {
+	Database *sql.DB // DB connection object, result from open()
+}
+
+func (db *DB) Init(initStr string) error {
+	var err error
+	db.Database, err = sql.Open("postgres", initStr)
+	if err != nil {
+		return err
+	}
+	_, err = db.Database.Exec("CREATE TABLE IF NOT EXISTS Post (" + 
+							  "Id BIGSERIAL PRIMARY KEY," +
+							  "Title VARCHAR(30) CHECK(Title != '')," +
+							  "Description VARCHAR(200) CHECK(Description != '')," +
+							  "Content TEXT CHECK(Content != '')," +
+							  "PostDate TIMESTAMP WITH TIME ZONE" +
+							  ");")
+	if err != nil {
+		return err
+	}
+	_, err = db.Database.Exec("CREATE TABLE IF NOT EXISTS Comment (" + 
+							  "Id BIGSERIAL PRIMARY KEY," +
+							  "PostId BIGINT REFERENCES Post (Id)," +
+							  "Author VARCHAR(30) DEFAULT 'Anonymous'," +
+							  "Content VARCHAR(250) CHECK(Content != '')," +
+							  "CommDate TIMESTAMP WITH TIME ZONE," +
+							  "Email VARCHAR(30) CHECK(Email != '')" +
+							  ");")
+	if err != nil {
+		return err
+	}
+	_, err = db.Database.Exec("CREATE TABLE IF NOT EXISTS TagText (" + 
+							  "Id SERIAL PRIMARY KEY," +
+							  "TagText VARCHAR(30) UNIQUE CHECK(TagText != '')" +
+							  ");")
+	if err != nil {
+		return err
+	}
+	_, err = db.Database.Exec("CREATE TABLE IF NOT EXISTS Tags (" + 
+							  "PostId BIGINT REFERENCES Post (Id)," +
+							  "TagId INT REFERENCES TagText (Id)," +
+							  "UNIQUE(PostId, TagId)" +
+							  ");")
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (db *DB) Close() {
+	db.Database.Close()
+}
