@@ -21,7 +21,7 @@ func (db *DB) Init(initStr string) error {
 							  "Description VARCHAR(200) CHECK(Description != '')," +
 							  "Content TEXT CHECK(Content != '')," +
 							  "PostDate TIMESTAMP WITH TIME ZONE" +
-							  ");")
+							  ")")
 	if err != nil {
 		return err
 	}
@@ -32,14 +32,14 @@ func (db *DB) Init(initStr string) error {
 							  "Content VARCHAR(250) CHECK(Content != '')," +
 							  "CommDate TIMESTAMP WITH TIME ZONE," +
 							  "Email VARCHAR(30) CHECK(Email != '')" +
-							  ");")
+							  ")")
 	if err != nil {
 		return err
 	}
 	_, err = db.Database.Exec("CREATE TABLE IF NOT EXISTS TagText (" + 
 							  "Id SERIAL PRIMARY KEY," +
 							  "TagText VARCHAR(30) UNIQUE CHECK(TagText != '')" +
-							  ");")
+							  ")")
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func (db *DB) Init(initStr string) error {
 							  "PostId BIGINT REFERENCES Post (Id) ON DELETE CASCADE," +
 							  "TagId INT REFERENCES TagText (Id) ON DELETE CASCADE," +
 							  "UNIQUE(PostId, TagId)" +
-							  ");")
+							  ")")
 	if err != nil {
 		return err
 	}

@@ -13,7 +13,7 @@ type Post struct {
 
 type Comment struct {
     Id uint64          // - comment id
-    PostId uint32   
+    PostId uint64   
     Author string      // - Just name, optional, no real 'users'
     Content string     
     CommDate time.Time 
