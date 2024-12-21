@@ -36,7 +36,7 @@ func (db *DB) NewPost(post Post) (Post, error) {
 	// Post created successfully, but tags do not
 	if err != nil {
 		// Remove post
-		db.Database.Exec("DELETE FROM Posts WHERE Id = $1", post.Id)
+		db.Database.Exec("DELETE FROM Post WHERE Id = $1", post.Id)
 		// Remove all tags created
 		for _, val := range post.Tags {
 			db.Database.Exec("DELETE FROM TagText WHERE tagtext = $1", val)
