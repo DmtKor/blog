@@ -37,16 +37,28 @@ func (db *DB) GetPostsByPage(page uint, pagesize uint) ([]Post, error) {
 	return posts, nil
 }
 
+func (db *DB) getPageNum(pagesize uint64) (uint64, error) {
+	n, err := db.GetPostsNum()
+	if err != nil {
+		return 0, err
+	}
+	pageNum := n / pagesize
+	if n % pagesize != 0 {
+		pageNum += 1
+	}
+	return pageNum, nil
+}
+
 func (db *DB) GetPostsNum() (uint64, error) {
 	var res uint64
-	err := db.Database.QueryRow("SELECT LEN(*) FROM Post").Scan(&res)
+	err := db.Database.QueryRow("SELECT COUNT(*) FROM Post").Scan(&res)
 	return res, err
 }
 
 func (db *DB) GetPostById(id uint64) (Post, error) {
 	var p Post
 	err := db.Database.QueryRow("SELECT Id, Title, Description," + 
-		" Content, PostDate FROM Post WHERE PostId = $1", id).Scan(&p.Id, &p.Title, &p.Description, &p.Content, &p.PostDate)
+		" Content, PostDate FROM Post WHERE Id = $1", id).Scan(&p.Id, &p.Title, &p.Description, &p.Content, &p.PostDate)
 	return p, err
 }
 
