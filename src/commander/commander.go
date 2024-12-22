@@ -10,6 +10,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+var Comm Commander
 
 type Commander struct {
 	Database managedb.DB      // DB struct, all ops with data here
@@ -24,12 +25,12 @@ type Commander struct {
 // Initialise server, starts routine commander.Wait
 // dbInitStr - "user=your_username password=your_password dbname=name_of_database sslmode=disable"
 // addr - address to listen (for HTTP server)
-func (commander *Commander) InitServer(dbInitStr string, addr string) {
+func (commander *Commander) InitServer(dbInitStr string, addr string, middleware []func(http.Handler)http.Handler) {
 	// Initialize DB
 	commander.Database = managedb.DB{}
 	err := commander.Database.Init(dbInitStr)
 	if err != nil {
-		fmt.Println("Can not access DB:", err)
+		fmt.Println("[CRITICAL ERROR] Can not access DB:", err)
 		os.Exit(1) // In this moment its safe to just close app
 	}
 	// Initialize goroutine tools (channels do not need buffers since they'll be used only once)
@@ -42,11 +43,12 @@ func (commander *Commander) InitServer(dbInitStr string, addr string) {
 	go commander.wait()
 	// Start listening CLI
 	go commander.listenCLI()
-
+	commander.Router.Use(middleware...)
 	/*
-	TODO: add handlers and use middleware on them!! (err_handler should not be added)
+	TODO: add handlers!! (err_handler should not be added)
 	*/
 	commander.ShouldHandle = true
+	fmt.Println("[INFO] Listening...")
 	http.ListenAndServe(addr, commander.Router)
 }
 
