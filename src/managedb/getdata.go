@@ -40,7 +40,7 @@ func (db *DB) GetPostsByPage(page uint, pagesize uint) ([]Post, error) {
 }
 
 // How many pages it will be with this page size
-func (db *DB) getPageNum(pagesize uint64) (uint64, error) {
+func (db *DB) GetPageNum(pagesize uint64) (uint64, error) {
 	n, err := db.GetPostsNum()
 	if err != nil {
 		return 0, err
