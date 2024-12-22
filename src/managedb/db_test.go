@@ -51,6 +51,15 @@ func TestDB(t *testing.T) {
 		posts = append(posts, post)
 	}
 
+	// Check if post exists
+
+	val, err := db.PostExists(post.Id)
+	if err != nil {
+		t.Log("cannot check if comment exists: ", err)
+	} else {
+		t.Log("Post", post.Id, "exists? :", val)
+	}
+
 	err = db.NewComment(Comment{ PostId: posts[0].Id, Author: "a1", Content: "c1", Email: "e1@mail.com", CommDate: time.Now() })
 	if err != nil {
 		t.Error("error adding new comment 1,", err)
@@ -78,7 +87,7 @@ func TestDB(t *testing.T) {
 
 	// Check if comment exists
 
-	val, err := db.CommExists(2)
+	val, err = db.CommExists(2)
 	if err != nil {
 		t.Log("cannot check if comment exists: ", err)
 	} else {

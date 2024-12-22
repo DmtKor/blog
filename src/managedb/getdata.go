@@ -34,6 +34,19 @@ func (db *DB) CommExists(commid uint64) (bool, error) {
 	return true, nil
 }
 
+// Check if post exists
+func (db *DB) PostExists(postid uint64) (bool, error) {
+	var n int
+	err := db.Database.QueryRow("SELECT COUNT(*) FROM Post WHERE Id = $1", postid).Scan(&n)
+	if err != nil {
+		return false, errors.New("error in PostgreSQL: " + err.Error())
+	}
+	if n == 0 {
+		return false, nil
+	}
+	return true, nil
+}
+
 // Get every post on page sorted by creation time (page numbers start from 1)
 func (db *DB) GetPostsByPage(page uint, pagesize uint) ([]Post, error) {
 	rows, err := db.Database.Query("SELECT Id, Title, Description, Content, PostDate FROM Post " + 
