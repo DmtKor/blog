@@ -2,6 +2,7 @@ package managedb
 
 import "errors"
 
+// Create new post in DB from Post struct data
 func (db *DB) NewPost(post Post) (Post, error) {
 	// post.Id will be ignored
 	if post.Content == "" {
@@ -47,6 +48,7 @@ func (db *DB) NewPost(post Post) (Post, error) {
 	return post, err // Returns post with updated Id
 }
 
+// Create new comment in DB from Comment struct data
 func (db *DB) NewComment(comm Comment) error {
 	if comm.Content == "" {
 		return errors.New("empty comm.content")
@@ -64,6 +66,7 @@ func (db *DB) NewComment(comm Comment) error {
 	return nil
 }
 
+// Tell DB that in this post is used this tag
 func (db *DB) AddTagToPost(text string, post Post) error {
 	_, err := db.Database.Exec("INSERT INTO Tags (PostId, TagId) VALUES ($1, (SELECT DISTINCT Id FROM" +
 	" TagText WHERE tagtext = $2))", post.Id, text)

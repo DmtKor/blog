@@ -5,10 +5,13 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// For database connection should be created this object
 type DB struct {
 	Database *sql.DB // DB connection object, result from open()
 }
 
+// Open connection, create tables (if they don't exist)/ 
+// This function is called in commander package
 func (db *DB) Init(initStr string) error {
 	var err error
 	db.Database, err = sql.Open("postgres", initStr)
@@ -54,6 +57,7 @@ func (db *DB) Init(initStr string) error {
 	return nil
 }
 
+// Close DB connection
 func (db *DB) Close() {
 	db.Database.Close()
 }
