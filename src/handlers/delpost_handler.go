@@ -1,5 +1,10 @@
 package handlers
 
+import "net/http"
+
+func DelPostHandler(w http.ResponseWriter, r *http.Request) {
+	
+}
 // DELETE handler deletes post and redirects to /browse?page=1&pagesize=10
 // If error occurrs, redirect to err_handler with message
 // Path: /doc?id=... (id not optional) - just like seepost_handler, but with DELETE method

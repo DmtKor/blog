@@ -1,5 +1,10 @@
 package handlers
 
+import "net/http"
+
+func SeePostHandler(w http.ResponseWriter, r *http.Request) {
+	
+}
 // GET handler returns HTML page with post, tags and comments (also DELETE button)
 // If error occurrs, redirect to err_handler with message
 // Path: /doc?id=... (id is not optional)
