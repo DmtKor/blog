@@ -76,6 +76,15 @@ func TestDB(t *testing.T) {
 		t.Log("wrong comment was not created. ", err)
 	}
 
+	// Check if comment exists
+
+	val, err := db.CommExists(2)
+	if err != nil {
+		t.Log("cannot check if comment exists: ", err)
+	} else {
+		t.Log("Comment 2 exists? :", val)
+	}
+
 	// get data
 
 	posts, err = db.GetAllPosts()
@@ -93,7 +102,7 @@ func TestDB(t *testing.T) {
 		t.Error("error reading posts number,", err)
 	} else {
 		pagesize := uint64(2)
-		pagenum, err := db.getPageNum(pagesize)
+		pagenum, err := db.GetPageNum(pagesize)
 		if err != nil {
 			t.Error("Unable to get number of pages")
 		} else {

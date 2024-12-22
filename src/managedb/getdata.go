@@ -1,5 +1,7 @@
 package managedb
 
+import "errors"
+
 // Get every row in Post table
 func (db *DB) GetAllPosts() ([]Post, error) {
 	rows, err := db.Database.Query("SELECT Id, Title, Description, Content, PostDate FROM Post ORDER BY PostDate DESC")
@@ -17,6 +19,19 @@ func (db *DB) GetAllPosts() ([]Post, error) {
 		posts = append(posts, p)
 	}
 	return posts, nil
+}
+
+// Check if comment exists
+func (db *DB) CommExists(commid uint64) (bool, error) {
+	var n int
+	err := db.Database.QueryRow("SELECT COUNT(*) FROM Comment WHERE Id = $1", commid).Scan(&n)
+	if err != nil {
+		return false, errors.New("error in PostgreSQL: " + err.Error())
+	}
+	if n == 0 {
+		return false, nil
+	}
+	return true, nil
 }
 
 // Get every post on page sorted by creation time (page numbers start from 1)
