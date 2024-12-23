@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Blog - Post {{ .Post.Title}}</title>
+    </head>
+    <body>
+        <div>
+            <h2>{{ .Post.Title}}</h2>
+            <div>
+                {{ .Post.Description}}
+                <br>
+                {{ .Post.Content}}
+            </div>
+        </div>
+    </body>
+</html>

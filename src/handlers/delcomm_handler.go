@@ -5,13 +5,11 @@ import (
 	"context"
 	"net/http"
 	"strconv"
-
-	"github.com/go-chi/chi/v5"
 )
 
 // DELETE /comment?postid=...&commid=... (commid not optional), deletes comment, is called by link/button on page
 func DelCommHandler(w http.ResponseWriter, r *http.Request) {
-	commid, err := strconv.Atoi(chi.URLParam(r, "commid"))
+	commid, err := strconv.Atoi(r.URL.Query().Get("commid"))
 	if err != nil {
 		// Error reading commid parameter
 		ctx := context.WithValue(r.Context(), "errormsg", "Unable to read comment ID (" + err.Error() + ").")
@@ -37,7 +35,7 @@ func DelCommHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	// If comment was deleted successfully 
-	postid, err := strconv.Atoi(chi.URLParam(r, "postid"))
+	postid, err := strconv.Atoi(r.URL.Query().Get("postid"))
 	exists, err = commander.Comm.Database.PostExists(uint64(postid))
 	if err != nil || !exists {
 		// Redirect to browse

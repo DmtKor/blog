@@ -25,7 +25,7 @@ type Commander struct {
 // Initialise server, starts routine commander.Wait
 // dbInitStr - "user=your_username password=your_password dbname=name_of_database sslmode=disable"
 // addr - address to listen (for HTTP server)
-func (commander *Commander) InitServer(dbInitStr string, addr string, middleware []func(http.Handler)http.Handler) {
+func (commander *Commander) InitServer(dbInitStr string, addr string, router *chi.Mux) {
 	// Initialize DB
 	commander.Database = managedb.DB{}
 	err := commander.Database.Init(dbInitStr)
@@ -33,20 +33,16 @@ func (commander *Commander) InitServer(dbInitStr string, addr string, middleware
 		fmt.Println("[CRITICAL ERROR] Can not access DB:", err)
 		os.Exit(1) // In this moment its safe to just close app
 	}
+	fmt.Println("[INFO] DB initialised")
 	// Initialize goroutine tools (channels do not need buffers since they'll be used only once)
 	// There's no need to somehow 'initialise' WaitGroup
 	commander.CritErrorCh = make(chan string)
 	commander.UserInputCh = make(chan string)
-	// Initialize router and start server
-	commander.Router = chi.NewRouter()
 	// Start listening for events
 	go commander.wait()
 	// Start listening CLI
 	go commander.listenCLI()
-	commander.Router.Use(middleware...)
-	/*
-	TODO: add handlers!! (err_handler should not be added)
-	*/
+	commander.Router = router
 	commander.ShouldHandle = true
 	fmt.Println("[INFO] Listening...")
 	http.ListenAndServe(addr, commander.Router)

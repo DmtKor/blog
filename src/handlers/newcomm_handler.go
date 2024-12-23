@@ -7,15 +7,13 @@ import (
 	"net/http"
 	"strconv"
 	"time"
-
-	"github.com/go-chi/chi/v5"
 )
 
 // POST handler /comment?postid=... (postid not optional) - creates new comment,
 // redirects to updated /doc?id=postid page
 // Errors -> err_handler
 func NewCommHandler(w http.ResponseWriter, r *http.Request) {
-	postid, err := strconv.Atoi(chi.URLParam(r, "postid"))
+	postid, err := strconv.Atoi(r.URL.Query().Get("postid"))
 	if err != nil {
 		ctx := context.WithValue(r.Context(), "errormsg", "Unable to read post ID (" + err.Error() + ").")
 		go ErrHandler(w, r.WithContext(ctx))

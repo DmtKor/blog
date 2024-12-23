@@ -12,7 +12,7 @@ import (
 
 // POST handler adds new post to DB and redirects to created post
 // If error occurrs, redirect to err_handler with message
-func NewPostHandlerPOST(w http.ResponseWriter, r *http.Request) {
+func NewPostHandler(w http.ResponseWriter, r *http.Request) {
 	post := managedb.Post{}
 	post.Content = r.FormValue("Content")
 	post.Description = r.FormValue("Description")

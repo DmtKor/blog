@@ -5,15 +5,13 @@ import (
 	"context"
 	"net/http"
 	"strconv"
-
-	"github.com/go-chi/chi/v5"
 )
 
 // Path: /doc?id=... (id not optional) - just like seepost_handler, but with DELETE method
 // DELETE handler deletes post and redirects to /browse?page=1&pagesize=10
 // If error occurrs, redirect to err_handler with message
 func DelPostHandler(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
 		// Error reading commid parameter
 		ctx := context.WithValue(r.Context(), "errormsg", "Unable to read post ID (" + err.Error() + ").")

@@ -187,9 +187,4 @@ func TestDB(t *testing.T) {
 		t.Error("Not all tags were deleted!")
 	}
 
-	// Removing tables
-	db.Database.Exec("DROP TABLE Post")
-	db.Database.Exec("DROP TABLE Comment")
-	db.Database.Exec("DROP TABLE Tags")
-	db.Database.Exec("DROP TABLE TagText")
 }

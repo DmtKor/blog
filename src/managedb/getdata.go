@@ -2,6 +2,8 @@ package managedb
 
 import "errors"
 
+// TODO: get tags
+
 // Get every row in Post table
 func (db *DB) GetAllPosts() ([]Post, error) {
 	rows, err := db.Database.Query("SELECT Id, Title, Description, Content, PostDate FROM Post ORDER BY PostDate DESC")

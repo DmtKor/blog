@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Blog - Page {{ .Page}}</title>
+    </head>
+    <body>
+        <div>
+            <h2>Posts (page {{ .Page}})</h2>
+            <div>
+                {{range .Posts}}
+                <div>
+                    <h4>{{ .PostDate}}: {{ .Title}}</h4>
+                    <p>
+                        {{ .Description}}
+                    </p>
+                    <br>
+                    <p>
+                        {{range .Tags}}
+                        <p>|{{ .}}|</p>
+                        {{end}}
+                        <a href="/doc?id={{ .Id}}">Check</a>
+                    </p>
+                    <br>
+                </div>
+                {{end}}
+            </div>
+        </div>
+    </body>
+</html>
