@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"sync"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 )
@@ -45,7 +46,14 @@ func (commander *Commander) InitServer(dbInitStr string, addr string, router *ch
 	commander.Router = router
 	commander.ShouldHandle = true
 	fmt.Println("[INFO] Listening...")
-	http.ListenAndServe(addr, commander.Router)
+	server := &http.Server{
+        Addr:         addr,
+        Handler:      commander.Router,
+        ReadTimeout:  10 * time.Second,
+        WriteTimeout: 10 * time.Second,
+        IdleTimeout:  15 * time.Second,
+    }
+	server.ListenAndServe()
 }
 
 // Listen channels (select), listen channels, call commander.ShutdownServer when needed
