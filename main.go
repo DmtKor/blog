@@ -8,6 +8,8 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
+// var initstr_temp string = "user=username password=password dbname=dbname sslmode=disable"
+
 func main() {
 	router := chi.NewRouter()
 	router.Use(middleware.LoggerMiddleware, middleware.RedirectMiddleware)
